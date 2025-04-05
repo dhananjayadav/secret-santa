@@ -1,0 +1,30 @@
+.file-upload-container {
+  border: 2px dashed #aaa;
+  padding: 20px;
+  max-width: 400px;
+  border-radius: 8px;
+  background-color: #fafafa;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.file-upload-input {
+  display: block;
+  margin-bottom: 12px;
+  cursor: pointer;
+}
+
+.file-upload-success {
+  color: #2e7d32;
+  font-size: 0.9rem;
+}
+
+.file-upload-error {
+  color: #d32f2f;
+  font-size: 0.9rem;
+}
+
+.file-upload-success ul,
+.file-upload-error ul {
+  margin: 5px 0 0 20px;
+  padding: 0;
+}
