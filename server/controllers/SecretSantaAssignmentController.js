@@ -11,8 +11,8 @@ const isValidMimeType = (file) =>
 class SecretSantaAssignmentController {
   static assignSanta(req, res, next) {
     try {
-      let employeeFile = req.files['employees'];
-      let lastYearFile = req.files['lastYear'];
+      let employeeFile = req.files?.['employees'];
+      let lastYearFile = req.files?.['lastYear'];
 
       if(!employeeFile || !lastYearFile) {
         throw new BadRequestError("employee csv and lastYear CSV file is required");
