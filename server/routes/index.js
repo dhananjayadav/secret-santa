@@ -1,8 +1,8 @@
 const express = require("express");
-const SecretSantaAssignmentController = require("../controllers/SecretSantaAssignmentController");
+const secretSantaRouter = require("./secretSantaRoutes");
 
-const secretSantaRouter = express.Router();
+const indexRouter = express.Router();
 
-secretSantaRouter.post("/assign", SecretSantaAssignmentController.assignSanta);
+indexRouter.use("/secret-santa", secretSantaRouter);
 
-module.exports = secretSantaRouter;
+module.exports = indexRouter;
