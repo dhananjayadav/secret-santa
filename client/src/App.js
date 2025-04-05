@@ -22,15 +22,17 @@ function App() {
     );
   };
 
-  const closeAlert = () => {
-    setAlertMessage("");
-  };
-
   const assignSecretSanta = async () => {
     setIsSecretSantaLoading(true);
     const response = await assignSecretSantaAPI(employeeFile, lastYearFile);
-    if (response.data) setGeneratedCSVFile(response.data);
     setIsSecretSantaLoading(false);
+    if (response.data) {
+      setGeneratedCSVFile(response.data);
+    } else {
+      setAlertMessage(
+        "Oops! We couldn’t process your request at the moment. Something went wrong — please try again shortly."
+      );
+    }
   };
 
   const resetForm = () => {
