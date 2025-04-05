@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import './FileUpload.css';
 
 const FileUpload = ({
@@ -6,15 +6,17 @@ const FileUpload = ({
   maxFileSizeMB = 2,
   multiple = false,
   onFileSelect,
-  onInvalidFile
+  onInvalidFile,
+  label
 }) => {
   const [fileNames, setFileNames] = useState([]);
+  const inputRef = useRef(null);
 
   const handleFileChange = (e) => {
     const selectedFiles = Array.from(e.target.files);
     const validFiles = [];
-    const isInvalidFile = [];
     const newFileNames = [];
+    let isInvalidFile = false;
 
     selectedFiles.forEach((file) => {
       const isFormatValid = allowedFormats.includes(file.type);
@@ -22,39 +24,45 @@ const FileUpload = ({
 
       if (!isFormatValid || !isSizeValid) {
         isInvalidFile = true;
-        return;
+      } else {
+        validFiles.push(file);
+        newFileNames.push(file.name);
       }
-
-      validFiles.push(file);
-      newFileNames.push(file.name);
     });
 
-    if(isInvalidFile){
+    if (isInvalidFile) {
+      if (inputRef.current) inputRef.current.value = '';
+      setFileNames([]);
       return onInvalidFile && onInvalidFile();
     }
 
     setFileNames(newFileNames);
-    if (validFiles.length > 0) {
-      onFileSelect && onFileSelect(multiple ? validFiles : validFiles[0]);
-    }
+    onFileSelect && onFileSelect(multiple ? validFiles : validFiles[0]);
   };
 
   return (
-    <div className="upload-container">
-      <input
-        type="file"
-        onChange={handleFileChange}
-        multiple={multiple}
-        className="upload-input"
-      />
+    <div className="file-fancy-upload">
+      <label className="file-upload-label">
+        <h4>{label}</h4>
+        <input
+          type="file"
+          ref={inputRef}
+          onChange={handleFileChange}
+          multiple={multiple}
+          className="file-upload-input"
+        />
+        <span className="file-upload-btn">
+          📁 Upload File{multiple ? 's' : ''}
+        </span>
+      </label>
+
       {fileNames.length > 0 && (
-        <div className="upload-success">
-          <p>Selected:</p>
-          <ul>
-            {fileNames.map((name, idx) => (
-              <li key={idx}>{name}</li>
-            ))}
-          </ul>
+        <div className="file-file-list">
+          {fileNames.map((name, idx) => (
+            <div key={idx} className="file-name">
+              ✅ {name}
+            </div>
+          ))}
         </div>
       )}
     </div>
