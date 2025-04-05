@@ -1,12 +1,11 @@
 import React from 'react';
 import './Alert.css';
 
-const Alert = ({ message, onClose }) => {
+const Alert = ({ message, onClose, children }) => {
   return (
     <div className="alert-overlay">
       <div className="alert">
-        <p>{message}</p>
-        <button onClick={onClose}>OK</button>
+        {children}
       </div>
     </div>
   );
