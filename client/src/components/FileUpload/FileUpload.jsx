@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import "./FileUpload.css";
 
 const FileUpload = ({
@@ -29,6 +29,10 @@ const FileUpload = ({
 
     onFileSelect && onFileSelect(multiple ? selectedFiles : selectedFiles[0]);
   };
+
+  useEffect(()=> {
+    if(files.length === 0) inputRef.current.value = "";
+  }, [files])
 
   return (
     <div className="file-fancy-upload">

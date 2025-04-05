@@ -46,6 +46,7 @@ function App() {
       type: "text/csv;charset=utf-8;",
     });
     saveAs(blob, `secret_santa_${Date.now()}.csv`);
+    resetForm();
   };
 
   return (
