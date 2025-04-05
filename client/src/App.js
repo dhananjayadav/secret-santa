@@ -29,6 +29,12 @@ function App() {
     if (response.data) {
       setGeneratedCSVFile(response.data);
     } else {
+      resetForm();
+      if (response?.err?.status === 400) {
+        return setAlertMessage(
+          "Uh-oh! Some fields are missing or invalid in the uploaded files. Please double-check and upload files with complete and correct information."
+        );
+      }
       setAlertMessage(
         "Oops! We couldn’t process your request at the moment. Something went wrong — please try again shortly."
       );

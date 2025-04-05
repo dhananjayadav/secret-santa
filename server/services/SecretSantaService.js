@@ -1,3 +1,4 @@
+const BadRequestError = require('../errors/BadRequestError');
 const Employee = require('../models/Employee');
 const { parseCSV, generateCSV } = require('../utils/CSVUtil');
 const shuffle = require('../utils/shuffle');
@@ -7,8 +8,22 @@ class SecretSantaService {
     const employeesRaw = parseCSV(employeesCSV);
     const lastYearRaw = parseCSV(lastYearCSV);
 
+    employeesRaw.forEach((e, i) => {
+      if (!e.Employee_Name || !e.Employee_EmailID) {
+        throw new BadRequestError(`Missing fields in employees.csv at row ${i + 1}`);
+      }
+    });
+
+    lastYearRaw.forEach((row, i) => {
+      if (!row.Employee_EmailID || !row.Secret_Child_EmailID) {
+        throw new BadRequestError(`Missing fields in lastYear.csv at row ${i + 1}`);
+      }
+    });
+
     const employees = employeesRaw.map(e => new Employee(e.Employee_Name, e.Employee_EmailID));
-    const lastYearMap = Object.fromEntries(lastYearRaw.map(row => [row.Employee_EmailID, row.Secret_Child_EmailID]));
+    const lastYearMap = Object.fromEntries(
+      lastYearRaw.map(row => [row.Employee_EmailID, row.Secret_Child_EmailID])
+    );
 
     const givers = [...employees];
     const receivers = shuffle([...employees]);
@@ -38,10 +53,12 @@ class SecretSantaService {
         });
       }
 
-      if (isValid) return generateCSV(assignments);
+      if (isValid) {
+        return generateCSV(assignments);
+      }
     }
 
-    throw new Error('Could not generate a valid Secret Santa assignment.');
+    throw new BadRequestError('Could not generate a valid Secret Santa assignment.');
   }
 }
 
